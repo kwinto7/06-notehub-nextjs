@@ -40,10 +40,10 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
-function compactParams<T extends Record<string, any>>(obj: T): Partial<T> {
-  const out: Partial<T> = {};
+function compactParams<T extends object>(obj: T): Partial<T> {
+  const out = {} as Partial<T>;
   (Object.entries(obj) as [keyof T, T[keyof T]][]).forEach(([k, v]) => {
-    if (v !== undefined && v !== null && v !== "") {
+    if (v !== undefined && v !== null && v !== '') {
       out[k] = v;
     }
   });

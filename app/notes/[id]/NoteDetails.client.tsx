@@ -22,6 +22,7 @@ export default function NoteDetailsClient() {
     placeholderData: (prev) => prev,
     enabled: Boolean(id),           
     retry: false,
+    refetchOnMount: false,
   });
 
   if (isLoading) return <p>Loading, please wait...</p>;

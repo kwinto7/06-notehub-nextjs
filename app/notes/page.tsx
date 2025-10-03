@@ -1,27 +1,24 @@
-
+// app/notes/page.tsx
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { fetchNotes } from '@/lib/api';
 import NotesClient from './Notes.client';
 
 const PER_PAGE = 12;
 
-type Search = Record<string, string | string[] | undefined>;
+type Search = {
+  page?: string;
+  search?: string;
+};
 
 export default async function NotesPage({
   searchParams,
 }: {
-  searchParams?: Promise<Search> | Search;
+  searchParams: Promise<Search>;
 }) {
- 
-  const sp = typeof (searchParams as any)?.then === 'function'
-    ? await (searchParams as Promise<Search>)
-    : ((searchParams ?? {}) as Search);
+  const sp = await searchParams;
 
-  const rawPage = Array.isArray(sp.page) ? sp.page[0] : sp.page;
-  const rawSearch = Array.isArray(sp.search) ? sp.search[0] : sp.search;
-
-  const page = Math.max(1, Number(rawPage ?? 1));
-  const search = (rawSearch ?? '').trim();
+  const page = Math.max(1, Number(sp.page ?? 1));
+  const search = (sp.search ?? '').trim();
 
   const queryClient = new QueryClient();
   const queryKey = ['notes', { page, perPage: PER_PAGE, search }] as const;
@@ -37,4 +34,5 @@ export default async function NotesPage({
     </HydrationBoundary>
   );
 }
+
 
